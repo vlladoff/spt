@@ -12,7 +12,6 @@ To use SPT, follow these steps:
    ```shell
    go run cmd/spt/main.go -source='/test_data.csv'
 
-
 ## Usage
 SPT accepts the following command-line options:
 

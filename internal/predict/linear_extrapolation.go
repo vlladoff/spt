@@ -1,6 +1,6 @@
 package predict
 
-func LinearExtrapolation(ltvs []float64, ltvTargetN int32) float64 {
+func LinearExtrapolation(ltvs [7]float64, ltvTargetN int32) float64 {
 	var cords []Coordinate
 	for i, ltv := range ltvs {
 		cords = append(cords, Coordinate{X: float64(i + 1), Y: ltv})

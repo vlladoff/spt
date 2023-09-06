@@ -1,6 +1,6 @@
 package predict
 
-func LinearRegression(ltvs []float64, ltvNeedleNumber int32) float64 {
+func LinearRegression(ltvs [7]float64, ltvNeedleNumber int32) float64 {
 	var cords []Coordinate
 	for i, ltv := range ltvs {
 		cords = append(cords, Coordinate{X: float64(i + 1), Y: ltv})
@@ -18,6 +18,12 @@ func LinearRegression(ltvs []float64, ltvNeedleNumber int32) float64 {
 	}
 
 	f := float64(i)
+
+	if f == 0 || f*sum[2]-sum[0]*sum[0] == 0 {
+		//divide by zero (wrong data)
+		return 0
+	}
+
 	gradient := (f*sum[3] - sum[0]*sum[1]) / (f*sum[2] - sum[0]*sum[0])
 	intercept := (sum[1] / f) - (gradient * sum[0] / f)
 
