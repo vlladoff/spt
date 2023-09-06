@@ -83,9 +83,9 @@ func PredictData(data *[]*DataToPredict, fileType, aggType, model *string) []Pre
 		predictedLtv := 0.0
 		switch *model {
 		case config.ModelLinearExtrapolation:
-			predictedLtv = LinearExtrapolation(val[:], ltvN60) / float64(sumMaps.usersCount[key])
+			predictedLtv = LinearExtrapolation(val, ltvN60) / float64(sumMaps.usersCount[key])
 		case config.ModelLinearRegression:
-			predictedLtv = LinearRegression(val[:], ltvN60) / float64(sumMaps.usersCount[key])
+			predictedLtv = LinearRegression(val, ltvN60) / float64(sumMaps.usersCount[key])
 		}
 
 		predictedDataVal := PredictedData{

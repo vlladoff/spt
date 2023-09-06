@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"flag"
+	"log"
 	"os"
 
 	"github.com/vlladoff/spt/internal"
@@ -21,7 +22,7 @@ func main() {
 
 	err := ValidateParams(settings)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	var pt internal.PredictTool
