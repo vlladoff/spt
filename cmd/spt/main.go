@@ -3,17 +3,15 @@ package main
 import (
 	"errors"
 	"flag"
-	"log"
-	"os"
-
 	"github.com/vlladoff/spt/internal"
 	"github.com/vlladoff/spt/internal/config"
+	"log"
 )
 
 func main() {
 	settings := config.Settings{
 		Model:       flag.String("model", "ext", "predict model (ext|reg)"),
-		SourcePath:  flag.String("source", "", "path to source file"),
+		SourcePath:  flag.String("source", "", ""),
 		AggregateBy: flag.String("aggregate", "country", "aggregation type (country|campaign)"),
 		SortBy:      flag.String("sort", "name", "sort type (name|value)"),
 	}
@@ -37,9 +35,6 @@ func ValidateParams(params config.Settings) error {
 	}
 	if *params.AggregateBy != config.AggCampaign && *params.AggregateBy != config.AggCountry {
 		return errors.New("wrong agg type")
-	}
-	if _, err := os.Stat(*params.SourcePath); err != nil {
-		return errors.New("wrong path")
 	}
 
 	return nil

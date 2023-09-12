@@ -57,7 +57,7 @@ func TestSumRevenue(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		sumMaps := sumRevenue(&test.data, &test.fileType, &test.aggType)
+		sumMaps := sumRevenue(&test.data, &test.aggType)
 		// Check if sumLtv and usersCount match the expected values for each key
 		for key, expectedSumLtv := range test.expectedSumLtv {
 			actualSumLtv, ok := sumMaps.sumLtv[key]
@@ -153,7 +153,7 @@ func TestPredictData(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		predictedData := PredictData(&test.data, &test.fileType, &test.aggType, &test.model)
+		predictedData := PredictData(&test.data, &test.aggType, &test.model)
 		// Check if predicted data matches the expected values
 		for _, expectedData := range test.expectedData {
 			for _, actualData := range predictedData {

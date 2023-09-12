@@ -4,9 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/vlladoff/spt/internal/config"
-	"github.com/vlladoff/spt/internal/parser"
 	"github.com/vlladoff/spt/internal/predict"
+	"github.com/vlladoff/spt/internal/storage/file_storage"
 	"log"
+	"os"
 	"sort"
 )
 
@@ -18,15 +19,23 @@ type (
 )
 
 func (pt PredictTool) Start() {
-	data, fileType, err := parser.ParseData(*pt.SourcePath)
-	if len(*data) == 0 {
-		err = errors.New("empty data")
-	}
-	if err != nil {
-		log.Fatal(err)
+	data := new([]*predict.DataToPredict)
+
+	// file storage
+	if _, err := os.Stat(*pt.SourcePath); err == nil {
+		storage := file_storage.FileStorage{}
+		data, err = storage.GetLtvData(*pt.SourcePath)
+		if len(*data) == 0 {
+			err = errors.New("empty data")
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
-	predictedData := predict.PredictData(data, fileType, pt.Settings.AggregateBy, pt.Settings.Model)
+	// db storage
+
+	predictedData := predict.PredictData(data, pt.Settings.AggregateBy, pt.Settings.Model)
 
 	pt.printRes(&predictedData)
 }
