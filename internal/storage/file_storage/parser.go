@@ -1,4 +1,4 @@
-package parser
+package file_storage
 
 import (
 	"bufio"
@@ -11,13 +11,15 @@ import (
 	"path"
 )
 
-func ParseData(sourcePath string) (*[]*predict.DataToPredict, *string, error) {
+type FileStorage struct{}
+
+func (fl FileStorage) GetLtvData(sourcePath string) (*[]*predict.DataToPredict, error) {
 	data := new([]*predict.DataToPredict)
 	ext := path.Ext(sourcePath)
 
 	file, err := os.OpenFile(sourcePath, os.O_RDWR, os.ModePerm)
 	if err != nil {
-		return data, &ext, err
+		return data, err
 	}
 	defer file.Close()
 
@@ -35,13 +37,13 @@ func ParseData(sourcePath string) (*[]*predict.DataToPredict, *string, error) {
 	case predict.FileJson:
 		stat, err := file.Stat()
 		if err != nil {
-			return data, &ext, err
+			return data, err
 		}
 
 		bs := make([]byte, stat.Size())
 		_, err = bufio.NewReader(file).Read(bs)
 		if err != nil && err != io.EOF {
-			return data, &ext, err
+			return data, err
 		}
 
 		err = json.Unmarshal(bs, tempData)
@@ -69,5 +71,5 @@ func ParseData(sourcePath string) (*[]*predict.DataToPredict, *string, error) {
 		*data = append(*data, &dataVal)
 	}
 
-	return data, &ext, err
+	return data, err
 }

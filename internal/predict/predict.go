@@ -31,7 +31,7 @@ type (
 	}
 )
 
-func sumRevenue(data *[]*DataToPredict, fileType, aggType *string) SumData {
+func sumRevenue(data *[]*DataToPredict, aggType *string) SumData {
 	sumMaps := SumData{
 		sumLtv:     make(map[string][7]float64),
 		usersCount: make(map[string]int32),
@@ -56,7 +56,7 @@ func sumRevenue(data *[]*DataToPredict, fileType, aggType *string) SumData {
 			if ltv == 0.0 {
 				ltv = lastFilledLtv
 			}
-			if *fileType == FileJson {
+			if val.Users != 0 {
 				ltv1to7[ltvN] += ltv * float64(val.Users)
 			} else {
 				ltv1to7[ltvN] += ltv
@@ -65,7 +65,7 @@ func sumRevenue(data *[]*DataToPredict, fileType, aggType *string) SumData {
 		}
 		sumMaps.sumLtv[mapKey] = ltv1to7
 
-		if *fileType == FileJson {
+		if val.Users != 0 {
 			sumMaps.usersCount[mapKey] += val.Users
 		} else {
 			sumMaps.usersCount[mapKey]++
@@ -75,10 +75,10 @@ func sumRevenue(data *[]*DataToPredict, fileType, aggType *string) SumData {
 	return sumMaps
 }
 
-func PredictData(data *[]*DataToPredict, fileType, aggType, model *string) []PredictedData {
+func PredictData(data *[]*DataToPredict, aggType, model *string) []PredictedData {
 	var predictedData []PredictedData
 
-	sumMaps := sumRevenue(data, fileType, aggType)
+	sumMaps := sumRevenue(data, aggType)
 	for key, val := range sumMaps.sumLtv {
 		predictedLtv := 0.0
 		switch *model {
